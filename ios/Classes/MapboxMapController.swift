@@ -588,6 +588,12 @@ class MapboxMapController: NSObject, FlutterPlatformView, MGLMapViewDelegate, Ma
      *  MGLAnnotationControllerDelegate
      */
     func annotationController(_ annotationController: MGLAnnotationController, didSelect styleAnnotation: MGLStyleAnnotation) {
+        DispatchQueue.main.async {
+            // Remove tint color overlay from selected annotation by
+            // deselecting. This is not handled correctly if requested
+            // synchronously from the callback.
+            annotationController.deselectStyleAnnotation(styleAnnotation)
+        }
         guard let channel = channel else {
             return
         }
